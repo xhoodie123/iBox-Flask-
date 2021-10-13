@@ -1,6 +1,6 @@
-#login page
 
-from flask import Blueprint
+
+from flask import Blueprint, render_template
 
 # defines blueprint of our app aka a bunch of ursl 
 
@@ -10,8 +10,8 @@ auth = Blueprint("auth", __name__) # defines blueprint
 
 @auth.route("/login")
 def login():
-	return "<p>Login</p>" # displays basic text on site with <p> tags </p> 
-	
+	return render_template("login.html", boolean = True) # displays basic text on site with <p> tags </p> 
+#text is a variable we can access within login.html template
 	
 	
 #defines user log out page
@@ -21,9 +21,8 @@ def logout():
 	
 	
 #defines user sign up page
-@auth.route("/signup")
+@auth.route("/sign-up")
 def sign_up():
-	return "<P>Sign Up</P>"
+	return render_template("sign_up.html") # displays the template created from our sign_up.html file
 	
 	
-
