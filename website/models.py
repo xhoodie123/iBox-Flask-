@@ -9,7 +9,7 @@ from sqlalchemy.sql import func #auto add the date
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key = True) # identify the note
     data = db.Column(db.String(10000)) # setmax string size of our notes
-    date = db.Column(db.DateTime(timezone = True), default= func.now) #give notes a date when created
+    date = db.Column(db.DateTime(timezone = True), default=func.now()) #give notes a date when created
     #associate different info for different users
     #foriegn key: column references another column; one to many
     #associate a user to a note
