@@ -1,10 +1,11 @@
 import re
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from sqlalchemy.sql.functions import current_user
+from sqlalchemy.sql.functions import current_user, user
 from .models import User
 # encrypts password, no inverse function
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
+from flask_login import login_user, login_required, logout_user, current_user 
 
 
 # defines blueprint of our app aka a bunch of ursl
@@ -23,8 +24,10 @@ def login():
 
 		user = User.query.filter_by(email = email).first() #filter all the users by email and each user mush have a unique email
 		if user:
-			if check_password_hash(user.password, password()): #if these hashes are the same
+			if check_password_hash(user.password, password): #if these hashes are the same
 				flash('Logged in successfully', category= 'success')
+				login_user(user, remember= True) # keeps user logged in
+				return redirect(url_for('views.home')) #takes user to their home page
 			else:
 				flash('Incorrect pass', category= 'error')
 		else:
@@ -32,14 +35,16 @@ def login():
 	data = request.form  # Access form attribute of the request
 	print(data)
 	# displays basic text on site with <p> tags </p>
-	return render_template("login.html", boolean=True)
+	return render_template("login.html",user = current_user)
 #text is a variable we can access within login.html template
 
 
 #defines user log out page
 @auth.route("/logout")
+@login_required # can only logout in logged in
 def logout():
-	return "<p>Logout</p>"
+	logout_user()
+	return redirect(url_for('auth.login'))
 
 
 #defines user sign up page
@@ -66,8 +71,9 @@ def sign_up():
 			new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='sha256'))  # creates a new user
 			db.session.add(new_user)  # adds the new user to the database
 			db.session.commit() # tell the database to update
+			login_user(new_user, remember= True) # keep newly created user logged in
 			flash('Account Created!.', category='success')
 			# takes the new user to the home page
 			return redirect(url_for('views.home'))
 	# displays the template created from our sign_up.html file
-	return render_template("sign_up.html")
+	return render_template("sign_up.html", user = current_user)
