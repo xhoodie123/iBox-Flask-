@@ -18,7 +18,8 @@ views = Blueprint("views", __name__)
 def home():
     if request.method == 'POST':
         note = request.form.get('note')
-        if len(note) < 1:
+        #if len(note) < 1:
+        if (0 == 1):
             flash('Note is short', category='error')
         else:
             # add note to database and associate with user
