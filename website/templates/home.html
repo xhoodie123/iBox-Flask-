@@ -1,7 +1,6 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
-
 {% block content %}
-<h1 align="center">Notes</h1>
+<h1 align="center">Group Chat</h1>
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
@@ -21,7 +20,18 @@
   </div>
 </form>
 
-<div align="right">
+<div align="center">
+  <h2>Download File</h2>
+
+  <body class="body">
+    <div class="container" align="center">
+      <!-- changed some button asethetics -->
+      <a href="/return-files/{{value}}" target="blank"><button class='btn btn-primary'>Download</button></a>
+    </div>
+  </body>
+</div>
+
+<div align="center">
   <!-- fixed! -->
   <h2>Upload File</h2>
   <form action="" method=post enctype=multipart/form-data>
@@ -31,14 +41,5 @@
   </form>
 </div>
 
-<div align="left">
-  <h2>Download File</h2>
 
-  <body class="body">
-    <div class="container" align="left">
-      <!-- changed some asethetics -->
-      <a href="/return-files/{{value}}" target="blank"><button class='btn btn-primary'>Download</button></a>
-    </div>
-  </body>
-</div>
 {% endblock %}
