@@ -3,28 +3,38 @@
 {% block content %}
 <h1 align="center">Notes</h1>
 <ul class="list-group list-group-flush" id="notes">
-    {% for note in user.notes %}
-    <li class="list-group-item">
-      {{ note.data }}
-      <button type="button" class="close" onClick="deleteNote({{note.id}})"> <!-- delete note-->
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </li>
-    {% endfor %}
-  </ul>
+  {% for note in user.notes %}
+  <li class="list-group-item">
+    {{ note.data }}
+    <button type="button" class="close" onClick="deleteNote({{note.id}})">
+      <!-- delete note-->
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </li>
+  {% endfor %}
+</ul>
 <form method="POST">
-    <textarea name = "note" id = "note" class = "form-control"></textarea> <!-- create notes form-->
-    <br/>
-    <div align="center">
-        <button type = "submit" class = "btn btn-primary">Add Note</button> <!-- create button for notes form-->
-    </div>
+  <textarea name="note" id="note" class="form-control"></textarea> <!-- create notes form-->
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Note</button> <!-- create button for notes form-->
+  </div>
 </form>
 
-div align = "right">
-<h2>Upload File</h2>
-<form action="" method=post enctype=multipart/form-data>
-	<p><input type=file name=file>
-	<input type=submit value=Upload>
-	
-</form>
-{% endblock %}
+<div align="right">
+  <h2>Upload File</h2>
+  <form action="" method=post enctype=multipart/form-data>
+    <p><input type=file name=file>
+      <input type=submit value=Upload>
+    </p>
+
+  </form>
+
+  <div align="right">
+    <h2>Download File</h2>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+        <input type=sumbit value=Download>
+      </p>
+    </form>
+    {% endblock %}
