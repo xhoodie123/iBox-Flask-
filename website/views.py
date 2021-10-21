@@ -68,12 +68,12 @@ def upload_file():
 # download API section
 
 
-@views.route('/downloadfile', methods=['GET'])
+@views.route("/downloadfile/<filename>", methods=['GET'])
 def download_file(filename):
-    return render_template('download_file.html', value=filename)
+    return render_template('download_file.html', user = current_user, value = filename)
 
 
-@views.route('/return-file')
+@views.route('/return-files/<filename>')
 def return_files_tut(filename):
     file_path = UPLOAD_FOLDER + filename
     return send_file(file_path, as_attachment=True, attachment_filename='')
