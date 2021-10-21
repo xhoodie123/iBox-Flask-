@@ -4,9 +4,11 @@ from flask_login import login_required, current_user
 from . models import Note
 from . import db
 import json  # for delete note
-# for securing uploaded file/ download file
-from werkzeug.utils import secure_filename, send_file
+from werkzeug.utils import secure_filename, send_file # for securing uploaded file/download file
 from flask import Flask, redirect, send_file  # needed for downloads section
+from . import UPLOAD_FOLDER
+import os
+
 
 views = Blueprint("views", __name__)
 
@@ -56,7 +58,7 @@ def upload_file():
             return redirect(request.url)
         else:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(views.config['UPLOAD_FOLDER'], filename)) #fixed
             print("saved file successfully")
     # send file name as parameter to downlad
         return redirect('/downloadfile/' + filename)
