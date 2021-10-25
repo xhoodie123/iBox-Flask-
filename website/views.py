@@ -62,7 +62,6 @@ def upload_file():
             print('no filename')
             return redirect(request.url)
         else:
-            os.makedirs(views.config['UPLOAD_FOLDER'], exist_ok=True) #fixed
             filename = secure_filename(file.filename)
             file.save(os.path.join(views.config['UPLOAD_FOLDER'], filename)) #fixed
             print("saved file successfully")
