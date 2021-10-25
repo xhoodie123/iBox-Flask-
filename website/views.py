@@ -13,7 +13,6 @@ from flask import current_app
 
 views = Blueprint("views", __name__)
 
-
 @views.route("/", methods=['GET', 'POST'])  # Note post Method is allowed
 @login_required  # cannot get to homepage if not logged in
 def home():
@@ -59,8 +58,7 @@ def upload_file():
             return redirect(request.url)
         else:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(
-                current_app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             print("saved file successfully")
     # send file name as parameter to downlad
         return redirect('/downloadfile/' + filename)
