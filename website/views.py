@@ -2,14 +2,12 @@ from flask import Blueprint, render_template, request, flash, jsonify
 from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
 from . models import Note
-from . import db
+from . import db, UPLOAD_FOLDER
 import json  # for delete note
 # for securing uploaded file/download file
 from werkzeug.utils import secure_filename, send_file
 from flask import Flask, redirect, send_file  # needed for downloads section
-from . import UPLOAD_FOLDER
 import os
-from flask import current_app
 
 views = Blueprint("views", __name__)
 
@@ -58,7 +56,7 @@ def upload_file():
             return redirect(request.url)
         else:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(UPLOAD_FOLDER, filename)) #fixed this
             print("saved file successfully")
     # send file name as parameter to downlad
         return redirect('/downloadfile/' + filename)
@@ -75,9 +73,8 @@ def download_file(filename):
 
 @views.route('/return-files/<filename>')
 def return_files_tut(filename):
-    file_path = UPLOAD_FOLDER + filename
+    file_path = 'uploads\\' + filename
     return send_file(file_path, as_attachment=True, attachment_filename='')
-    #return send_from_directory(file_path, as_attachment=True, attachment_filename='')
 # end download api section
 
 #@views.route("/files")

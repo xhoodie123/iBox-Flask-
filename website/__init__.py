@@ -7,7 +7,7 @@ import os
 db = SQLAlchemy()  # define a new database
 DB_NAME = "database.db"  # give it a name, store this database in the website folder
 
-UPLOAD_FOLDER = 'uploads/'  # needed for downloads section
+UPLOAD_FOLDER = 'website//uploads/'  # needed for downloads section
 
 if not os.path.exists(UPLOAD_FOLDER):  # create upload folder
     os.mkdir(UPLOAD_FOLDER)
@@ -32,7 +32,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Note, File  # defines our classes
+    from .models import User, Note  # defines our classes
 
     create_database(app)
 

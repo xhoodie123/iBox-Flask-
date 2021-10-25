@@ -4,9 +4,8 @@ from sqlalchemy.sql.functions import current_user, user
 from .models import User
 # encrypts password, no inverse function
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import UPLOAD_FOLDER, db
 from flask_login import login_user, login_required, logout_user, current_user
-
 
 # defines blueprint of our app aka a bunch of ursl
 
