@@ -2,12 +2,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager, login_manager
+import os
 
 db = SQLAlchemy()  # define a new database
 DB_NAME = "database.db"  # give it a name, store this database in the website folder
 
-UPLOAD_FOLDER = 'uploads'  # needed for downloads section
+UPLOAD_FOLDER = 'uploads/'  # needed for downloads section
 
+if not os.path.exists(UPLOAD_FOLDER): #create upload folder
+    os.mkdir(UPLOAD_FOLDER)
 
 def create_app():
     app = Flask(__name__)  # initiallizes flask
@@ -18,6 +21,7 @@ def create_app():
     # take database and tell it that its going to be used in this app
     db.init_app(app)
     # needed for downloads and uploads section
+
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     # telling app where the routes are

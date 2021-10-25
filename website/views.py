@@ -44,9 +44,13 @@ def delete_note():
     return jsonify({})  # return empty response
 
 
-@views.route('/uploadfile', methods=['GET', 'POST'])
+@views.route('/uploadfile/<path:filename>', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        #added
+        #f = request.files['file'] #get the file from the files object
+        #f.save(os.path.join(app.config['UPLOAD_FOLDER']),secure_filename(f.filename)) 
+        #end added
         # check if the post request has the file part
         if 'file' not in request.files:
             print('no file')
@@ -70,13 +74,22 @@ def upload_file():
 # download API section
 
 
-@views.route("/downloadfile/<filename>", methods=['GET'])
+@views.route("/downloadfile/<path:filename>", methods=['GET'])
 def download_file(filename):
     return render_template('download_file.html', user = current_user, value = filename)
 
 
-@views.route('/return-files/<filename>')
+@views.route('/return-files/<path:filename>')
 def return_files_tut(filename):
     file_path = UPLOAD_FOLDER + filename
     return send_file(file_path, as_attachment=True, attachment_filename='')
 # end download api section
+
+#@views.route("/files")
+#def list_files():
+#    files = []
+#    for filename in os.listdir(UPLOAD_FOLDER):
+#        path = os.path.join(UPLOAD_FOLDER, filename)
+#        if os.path.isfile(path):
+#            files.append(filename)
+#        return jsonify(files)
