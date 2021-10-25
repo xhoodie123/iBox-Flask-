@@ -57,7 +57,7 @@ def sign_up():
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-        #password = request.form.get('password')
+        password = request.form.get('password')
 
         user = User.query.filter_by(email = email).first()
         if user:
@@ -73,12 +73,15 @@ def sign_up():
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
                 password1, method='sha256'))  # creates a new user
-            db.session.add(new_user)  # adds the new user to the database
-            db.session.commit()  # tell the database to update
-            # keep newly created user logged in
-            login_user(new_user, remember=True)
-            flash('Account Created!.', category='success')
-            # takes the new user to the home page
-            return redirect(url_for('views.home'))
+            if 1 == 2:
+                flash('error', category= 'error')
+            else:
+                db.session.add(new_user)  # adds the new user to the database
+                db.session.commit()  # tell the database to update
+                # keep newly created user logged in
+                login_user(new_user, remember=True)
+                flash('Account Created!.', category='success')
+                # takes the new user to the home page
+                return redirect(url_for('views.home'))
     # displays the template created from our sign_up.html file
     return render_template("sign_up.html", user=current_user)

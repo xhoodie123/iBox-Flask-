@@ -74,6 +74,9 @@ def download_file(filename):
 @views.route('/return-files/<filename>')
 def return_files_tut(filename):
     file_path = 'uploads\\' + filename
+    if filename == '<filename>':
+        flash('File not found!', category= 'error')
+        return render_template('home.html', user=current_user)
     return send_file(file_path, as_attachment=True, attachment_filename='')
 # end download api section
 
