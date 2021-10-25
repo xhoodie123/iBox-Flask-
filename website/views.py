@@ -44,7 +44,7 @@ def delete_note():
     return jsonify({})  # return empty response
 
 
-@views.route('/uploadfile/<path:filename>', methods=['GET', 'POST'])
+@views.route('/uploadfile', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         #added
@@ -74,15 +74,14 @@ def upload_file():
 # download API section
 
 
-@views.route("/downloadfile/<path:filename>", methods=['GET'])
+@views.route('/downloadfile/<filename>', methods=['GET'])
 def download_file(filename):
     return render_template('download_file.html', user = current_user, value = filename)
 
-
-@views.route('/return-files/<path:filename>')
+@views.route('/return-files/<filename>')
 def return_files_tut(filename):
     file_path = UPLOAD_FOLDER + filename
-    return send_file(file_path, as_attachment=True, attachment_filename='')
+    return send_file(file_path, as_attachment=True, attachment_filename='IMG_4237')
 # end download api section
 
 #@views.route("/files")
