@@ -73,8 +73,8 @@ def sign_up():
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
                 password1, method='sha256'))  # creates a new user
-            if 1 == 2:
-                flash('error', category= 'error')
+            if 0 == 2:
+                flash('Login!', category= 'error')
             else:
                 db.session.add(new_user)  # adds the new user to the database
                 db.session.commit()  # tell the database to update

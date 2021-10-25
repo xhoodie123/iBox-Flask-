@@ -73,7 +73,7 @@ def download_file(filename):
 
 @views.route('/return-files/<filename>')
 def return_files_tut(filename):
-    file_path = 'uploads\\' + filename
+    file_path = 'uploads/' + filename
     if filename == '<filename>':
         flash('File not found!', category= 'error')
         return render_template('home.html', user=current_user)
