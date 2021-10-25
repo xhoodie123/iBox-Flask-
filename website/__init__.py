@@ -9,8 +9,9 @@ DB_NAME = "database.db"  # give it a name, store this database in the website fo
 
 UPLOAD_FOLDER = 'uploads/'  # needed for downloads section
 
-if not os.path.exists(UPLOAD_FOLDER): #create upload folder
+if not os.path.exists(UPLOAD_FOLDER):  # create upload folder
     os.mkdir(UPLOAD_FOLDER)
+
 
 def create_app():
     app = Flask(__name__)  # initiallizes flask
