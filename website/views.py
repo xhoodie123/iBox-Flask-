@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify
-from flask.helpers import flash
+from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
 from . models import Note
 from . import db
@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename, send_file # for securing uploaded fi
 from flask import Flask, redirect, send_file  # needed for downloads section
 from . import UPLOAD_FOLDER
 import os
-
+from flask import current_app
 
 views = Blueprint("views", __name__)
 
@@ -18,8 +18,7 @@ views = Blueprint("views", __name__)
 def home():
     if request.method == 'POST':
         note = request.form.get('note')
-        #if len(note) < 1:
-        if (0 == 1):
+        if len(note) < 1:
             flash('Note is short', category='error')
         else:
             # add note to database and associate with user
@@ -47,10 +46,6 @@ def delete_note():
 @views.route('/uploadfile', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        #added
-        #f = request.files['file'] #get the file from the files object
-        #f.save(os.path.join(app.config['UPLOAD_FOLDER']),secure_filename(f.filename)) 
-        #end added
         # check if the post request has the file part
         if 'file' not in request.files:
             print('no file')
@@ -63,7 +58,7 @@ def upload_file():
             return redirect(request.url)
         else:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(views.config['UPLOAD_FOLDER'], filename)) #fixed
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             print("saved file successfully")
     # send file name as parameter to downlad
         return redirect('/downloadfile/' + filename)
@@ -80,7 +75,8 @@ def download_file(filename):
 @views.route('/return-files/<filename>')
 def return_files_tut(filename):
     file_path = UPLOAD_FOLDER + filename
-    return send_file(file_path, as_attachment=True, attachment_filename='IMG_4237')
+    return send_file(file_path, as_attachment=True, attachment_filename='')
+    #return send_from_directory(file_path, as_attachment=True, attachment_filename='')
 # end download api section
 
 #@views.route("/files")
