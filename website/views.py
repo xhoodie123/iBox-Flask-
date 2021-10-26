@@ -59,18 +59,18 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))  # fixed this
             print("Saved file successfully")
-    # send file name as parameter to downlad
-        return redirect('/downloadfile/' + filename)
+    # send file name as parameter to downlad (may no longer be needed)
+        #return redirect('/downloadfile/' + filename)
 
     return render_template('upload_file.html', user=current_user)
 
 # download API section
 
-
-@views.route('/downloadfile/<filename>', methods=['GET'])
-def download_file(filename):
-    return render_template('download_file.html', user=current_user, value=filename)
-
+#depricated!
+#@views.route('/downloadfile/<filename>', methods=['GET'])
+#def download_file(filename):
+#    return render_template('download_file.html', user=current_user, value=filename)
+#end depricated
 
 @views.route('/return-files/<filename>')
 def return_files_tut(filename):
