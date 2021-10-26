@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
-from . models import File, Note
+from . models import Note
 from . import db, UPLOAD_FOLDER
 import json  # for delete note
 # for securing uploaded file/download file
