@@ -82,8 +82,6 @@ def return_files_tut(filename):
 # end download api section
 
 # start view file list
-
-
 @views.route('/', defaults={'req_path': ''})
 @views.route('/<path:req_path>')
 def list_file(req_path):
@@ -97,3 +95,9 @@ def list_file(req_path):
     uploads = os.listdir(abs_path)
     return render_template('uploads.html', uploads=uploads, user=current_user)
 # end view file list
+
+#start group manager
+@views.route('/group_manager', methods=['GET'])
+def group_manager():
+    return render_template('group_manager.html', user=current_user)
+#end group manager
