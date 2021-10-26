@@ -1,15 +1,16 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
-from . models import Note
+from . models import File, Note
 from . import db, UPLOAD_FOLDER
 import json  # for delete note
 # for securing uploaded file/download file
 from werkzeug.utils import secure_filename, send_file
-from flask import Flask, redirect, send_file  # needed for downloads section
+from flask import Flask, redirect, send_file, abort  # needed for downloads section
 import os
 
 views = Blueprint("views", __name__)
+
 
 @views.route("/", methods=['GET', 'POST'])  # Note post Method is allowed
 @login_required  # cannot get to homepage if not logged in
@@ -56,8 +57,8 @@ def upload_file():
             return redirect(request.url)
         else:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_FOLDER, filename)) #fixed this
-            print("saved file successfully")
+            file.save(os.path.join(UPLOAD_FOLDER, filename))  # fixed this
+            print("Saved file successfully")
     # send file name as parameter to downlad
         return redirect('/downloadfile/' + filename)
 
@@ -75,16 +76,24 @@ def download_file(filename):
 def return_files_tut(filename):
     file_path = 'uploads/' + filename
     if filename == '<filename>':
-        flash('File not found!', category= 'error')
+        flash('File not found!', category='error')
         return render_template('home.html', user=current_user)
     return send_file(file_path, as_attachment=True, attachment_filename='')
 # end download api section
 
-#@views.route("/files")
-#def list_files():
-#    files = []
-#    for filename in os.listdir(UPLOAD_FOLDER):
-#        path = os.path.join(UPLOAD_FOLDER, filename)
-#        if os.path.isfile(path):
-#            files.append(filename)
-#        return jsonify(files)
+# start view file list
+
+
+@views.route('/', defaults={'req_path': ''})
+@views.route('/<path:req_path>')
+def list_file(req_path):
+    abs_path = os.path.join('website/', req_path) # joining the base and requested path
+    if not os.path.exists(abs_path):
+        flash('No files have been uploaded!',
+              category='error')  # if path doesn't exist
+        return render_template('home.html', user=current_user)
+    if os.path.isfile(abs_path):
+        return send_file(req_path, as_attachment=True, attachment_filename='')
+    uploads = os.listdir(abs_path)
+    return render_template('uploads.html', uploads=uploads, user=current_user)
+# end view file list
