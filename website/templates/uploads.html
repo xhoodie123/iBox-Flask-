@@ -5,6 +5,7 @@
     <li>
         <a href="{{ (request.path + '/' if request.path != '/' else '') + upload }}">
             {{ (request.path + '/' if request.path != '/' else '') + upload }}
+            <iframe src="{{ (request.path + '/' if request.path != '/' else '') + upload }} " height="200" width="300" ></iframe>
         </a>
     </li>
     {% endfor %}
