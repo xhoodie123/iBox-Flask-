@@ -29,3 +29,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     notes = db.relationship('Note')  # create list of user's notes
+
+#class Group(db.Model, UserMixin):
+    #id = db.Column(db.Integer, primarykey = True)
+    #name = db.Column(db.String(150), unique = True)
+    #user_id = db.Column(db.integer, db.ForeignKey('user.id'))

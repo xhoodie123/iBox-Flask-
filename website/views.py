@@ -1,15 +1,17 @@
+from posixpath import splitext
+import re
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
 from . models import Note
-from . import db, UPLOAD_FOLDER
+from . import db, UPLOAD_FOLDER, FILE_EXT
 import json  # for delete note
 # for securing uploaded file/download file
 from werkzeug.utils import secure_filename, send_file
 from flask import Flask, redirect, send_file, abort  # needed for downloads section
 import os
-
 views = Blueprint("views", __name__)
+
 
 
 @views.route("/", methods=['GET', 'POST'])  # Note post Method is allowed
@@ -55,25 +57,30 @@ def upload_file():
         if file.filename == '':
             print('no filename')
             return redirect(request.url)
+        
         else:
             filename = secure_filename(file.filename)
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in FILE_EXT: # check if file extension is in whitelist
+                print('invalid file type')
+                flash('File type not allowed', category='error')        
             file.save(os.path.join(UPLOAD_FOLDER, filename))  # fixed this
             print("Saved file successfully")
     # send file name as parameter to downlad (may no longer be needed)
-        #return redirect('/downloadfile/' + filename)
+        return redirect('/downloadfile/' + filename)
 
     return render_template('upload_file.html', user=current_user)
 
 # download API section
 
 #depricated!
-#@views.route('/downloadfile/<filename>', methods=['GET'])
-#def download_file(filename):
-#    return render_template('download_file.html', user=current_user, value=filename)
+@views.route('/downloadfile/<filename>', methods=['GET'])
+def download_file(filename):
+    return render_template('download_file.html', user=current_user, value=filename)
 #end depricated
 
 @views.route('/return-files/<filename>')
-def return_files_tut(filename):
+def return_files(filename):
     file_path = 'uploads/' + filename
     if filename == '<filename>':
         flash('File not found!', category='error')
@@ -96,8 +103,25 @@ def list_file(req_path):
     return render_template('uploads.html', uploads=uploads, user=current_user)
 # end view file list
 
+#start delete file
+
+@views.route('/deletefile/<filename>', methods=['GET'])
+def delete_file(filename):
+    return render_template('delete_file.html', user=current_user, value=filename)
+
+@views.route('/delete-files/<filename>',methods=['GET', 'POST'])
+def delete_files(filename):
+    if filename == '<filename>':
+        flash('File not found!', category='error')
+        return render_template('home.html', user=current_user)
+    os.remove(os.path.join(UPLOAD_FOLDER, filename))
+    print('delete successful')
+    return render_template('home.html', user = current_user)
+#end dlete file
+
 #start group manager
 @views.route('/group_manager', methods=['GET'])
 def group_manager():
+
     return render_template('group_manager.html', user=current_user)
 #end group manager

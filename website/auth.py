@@ -80,7 +80,7 @@ def sign_up():
                 db.session.commit()  # tell the database to update
                 # keep newly created user logged in
                 login_user(new_user, remember=True)
-                flash('Account Created!.', category='success')
+                flash('Account Created!', category='success')
                 # takes the new user to the home page
                 return redirect(url_for('views.home'))
     # displays the template created from our sign_up.html file
