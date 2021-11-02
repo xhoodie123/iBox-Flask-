@@ -86,7 +86,7 @@ def return_files(filename):
 # end download api section
 
 #start delete file
-@views.route('/delete-files/<filename>',methods=['GET', 'POST'])
+@views.route('/delete-files/<filename>')
 def delete_files(filename):
     if filename == '<filename>':
         flash('File not found!', category='error')
