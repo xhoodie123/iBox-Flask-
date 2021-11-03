@@ -32,5 +32,6 @@ class User(db.Model, UserMixin):
 
 #class Group(db.Model, UserMixin):
     #id = db.Column(db.Integer, primarykey = True)
-    #name = db.Column(db.String(150), unique = True)
+    #group_name = db.Column(db.String(150))
+    #group_password = db.Column(db.String(150))
     #user_id = db.Column(db.integer, db.ForeignKey('user.id'))
