@@ -1,10 +1,15 @@
 {% extends "base.html" %} {%block title %}Join Group{% endblock %}
 
 {% block content %}
+<form method="POST">
 <h3 allign="center">Create Group</h3>
 	<!-- creates a class that allows user to enter first name of user-->
 	<div class="form-group">
 		<label for="FirstName"> Join Group</label>
-		<input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter group name" />
+		<input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter group link" />
+		<br />
+		<!-- creates a clickable button-->
+		<button type="submit" class="btn btn-primary">Join</button>
 	</div>
+</form>
 {%endblock%}

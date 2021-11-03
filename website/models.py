@@ -29,9 +29,11 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     notes = db.relationship('Note')  # create list of user's notes
+    group = db.relationship('Group')
 
-#class Group(db.Model, UserMixin):
-    #id = db.Column(db.Integer, primarykey = True)
-    #group_name = db.Column(db.String(150))
-    #group_password = db.Column(db.String(150))
-    #user_id = db.Column(db.integer, db.ForeignKey('user.id'))
+class Group(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    group_name = db.Column(db.String(150))
+    group_password = db.Column(db.String(150))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
