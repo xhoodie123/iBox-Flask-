@@ -60,10 +60,10 @@ def upload_file():
         else:
             filename = secure_filename(file.filename)
             file_ext = os.path.splitext(filename)[1]
-            #if file_ext not in FILE_EXT:  # check if file extension is in whitelist
-             #   print('invalid file type')
-              #  flash('File type not allowed', category='error')
-               # return redirect(request.url)
+            if file_ext not in FILE_EXT:  # check if file extension is in whitelist
+                print('invalid file type')
+                flash('File type not allowed', category='error')
+                return redirect(request.url)
             file.save(os.path.join(UPLOAD_FOLDER, filename))  # fixed this
             print("Saved file successfully")
 
