@@ -27,7 +27,7 @@ def create_app():
     # needed for downloads and uploads section
 
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 16 #16MB max file size
+    #app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 16 #16MB max file size
     app.config['UPLOAD_EXTENSIONS'] = FILE_EXT
 
     
