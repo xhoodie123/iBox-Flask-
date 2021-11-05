@@ -51,7 +51,7 @@ def create_app():
     db.init_app(app)
     
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 16 #16MB max file size
+    app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 32 #32MB max file size
     app.config['UPLOAD_EXTENSIONS'] = FILE_EXT
 
 ####################################################################################
