@@ -1,65 +1,75 @@
 import re
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+import datetime
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from sqlalchemy.sql.functions import current_user, user
-from .models import User
-
-#from .models import User, UserRoles, Role
-
+from .models import User, UserRoles, Role
 # encrypts password, no inverse function
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import UPLOAD_FOLDER, db
 from flask_login import login_user, login_required, logout_user, current_user
-
+from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
 # defines blueprint of our app aka a bunch of ursl
 
 auth = Blueprint("auth", __name__)  # defines blueprint
 
-# defines our login page
 
 
-# URL -> GET request, POST -> Submit button
-@auth.route("/login", methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-
-        # filter all the users by email and each user mush have a unique email
-        user = User.query.filter_by(email=email).first()
-        if user:
-            # if these hashes are the same
-            if check_password_hash(user.password, password):
-                flash('Logged in successfully', category='success')
-                login_user(user, remember=True)  # keeps user logged in
-                # takes user to their home page
-                return redirect(url_for('views.home'))
-            else:
-                flash('Incorrect password', category='error')
-        else:
-            flash('Email does not exist', category='error')
-    data = request.form  # Access form attribute of the request
-    print(data)
-    # displays basic text on site with <p> tags </p>
-    return render_template("login.html", user=current_user)
-# text is a variable we can access within login.html template
 
 
-# defines user log out page
-@auth.route("/logout")
-@login_required  # can only logout in logged in
-def logout():
-    logout_user()
-    return redirect(url_for('auth.login'))
+#initializes db
+
+def init_db():
+	db.drop_all()
+	db.create_all()
+	create_users()
+	
+#creates users
+def create_users():
+	db.create_all()
+	
+	#adding roles
+	
+	admin_role = find_or_create_role('admin', u'Admin')
+	
+	#add users
+	user = find_or_create_user(u'Admin', u'Example', u'admin@example.com', 'Password1', admin_role)
+	user = find_or_create_user(u'Member', u'Example', u'member@example.com', 'Password1')
+	db.session.commit() 
+	
 
 
-# defines user sign up page
-@auth.route("/sign-up", methods=['GET', 'POST'])
-def sign_up():
+#creates or detemines roles
+def find_or_create_role(name, label):
+	role = Role.query.filter(Role.name==name).first()
+	if not role:
+		role = Role(name=name, label = label)
+		db.session.add(role)
+	return role
+
+#creates or determines users	
+def find_or_create_user(first_name, last_name, email, password, role = None):
+
+	user = User.query.filter(User.email == email).first()
+	if not user:
+		user = User( email=email, first_name = first_name, last_name = last_name, passowrd = current_app.user_manager.password_manager.hash_password(password), active = True, email_confirmed_at = datetime.datetime.utcnow())
+	if role:
+		user.roles.append(role)
+	db.session.add(user)
+	return user	
+	
+
+
+
+#defines user signup-page
+	
+@auth.route("/register", methods=['GET', 'POST'])
+def register():
     if request.method == 'POST':
         email = request.form.get('email')  # gets all user input for user info
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        password = request.form.get('password')
 
         user = User.query.filter_by(email = email).first()
         if user:
@@ -89,48 +99,4 @@ def sign_up():
     return render_template("sign_up.html", user=current_user)
 
 
-
-# NEW AREA FOR THE OTHER ENGINEER PLEASE DO NOT UNCOMMENT #
-
-#initializes db
-
-#def init_db():
-#	db.drop_all()
-#	db.create_all()
-#	create_users()
-	
-#creates users
-#def create_users():
-#	db.create_all()
-	
-	#adding roles
-	
-#	admin_role = find_or_create_role('admin', u'Admin')
-	
-	#add users
-#	user = find_or_create_user(u'Admin', u'Example', u'admin@example.com', 'Password1', admin_role)
-#	user = find_or_create_user(u'Member', u'Example', u'member@example.com', 'Password1')
-#	db.session.commit() 
-	
-
-
-#creates or detemines roles
-#def find_or_create_role(name, label):
-#	role = Role.query.filter(Role.name==name).first()
-#	if not role:
-#		role = Role(name=name, label = label)
-#		db.session.add(role)
-#	return role
-
-#creates or determines users	
-#def find_or_create_user(first_name, last_name, email, password, role = None):
-
-#	user = User.query.filter(User.email == email).first()
-#	if not user:
-#		user = User( email=email, first_name = first_name, last_name = last_name, passowrd = current_app.user_manager.password_manager.hash_password(password), active = True, email_confirmed_at = datetime.datetime.utcnow())
-#	if role:
-#		user.roles.append(role)
-#	db.session.add(user)
-#	return user	
-	
 
