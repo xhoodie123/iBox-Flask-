@@ -109,7 +109,10 @@ def create_application():
     @login_manager.user_loader
     def load_user(id):
         # tell flask what user we are looking for
+        print("USER ID:")
+        print(id)
         return User.query.get(int(id))
+        
 
     return application
 
