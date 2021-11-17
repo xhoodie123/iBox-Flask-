@@ -3,11 +3,11 @@
 from flask import Flask
 from website import create_application
 
-application = create_application()
+app = create_application()
 #application = Flask(__name__)
 
 if __name__ == "__main__": 	# runs flask app, only if we run this file it will run the server
-    application.debug = True
-    application.run()
+    app.debug = True
+    app.run()
 
 # test

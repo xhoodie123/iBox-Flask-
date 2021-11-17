@@ -42,17 +42,17 @@ if not os.path.exists(UPLOAD_FOLDER):  # create upload folder
     #db.create_all()
   
 def create_application():
-    application = Flask(__name__)  # initiallizes flask
+    app = Flask(__name__)  # initiallizes flask
     # encrypts or secures cookies and session data realted to th site
-    application.config['SECRET_KEY'] = '1997FordFocus'
+    app.config['SECRET_KEY'] = '1997FordFocus'
     # means that our sql database is stored in DB_NAME
-    application.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     # take database and tell it that its going to be used in this app
-    db.init_app(application)
+    db.init_app(app)
     
-    application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    application.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 32 #32MB max file size
-    application.config['UPLOAD_EXTENSIONS'] = FILE_EXT
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 32 #32MB max file size
+    app.config['UPLOAD_EXTENSIONS'] = FILE_EXT
 
 ####################################################################################
 # THIS IS FOR THE ENGINEERS ONLY, DO NOT UNCOMMENT OTHER TEAM OR APP WILL NOT WORK #
@@ -95,16 +95,16 @@ def create_application():
     #setting up flask-user
     #user_manager=UserManager(app,db,User)
 
-    application.register_blueprint(views, url_prefix='/')
-    application.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/')
 
     from .models import User, Note, Group  # defines our classes
 
-    create_database(application)
+    create_database(app)
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'  # take anon user here
-    login_manager.init_app(application)
+    login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(id):
@@ -114,10 +114,10 @@ def create_application():
         return User.query.get(int(id))
         
 
-    return application
+    return app
 
 
-def create_database(application):
+def create_database(app):
     if not path.exists('website/' + DB_NAME):
-        db.create_all(app=application)
+        db.create_all(app=app)
         print('Created Database!')
