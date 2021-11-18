@@ -16,7 +16,6 @@ auth = Blueprint("auth", __name__)  # defines blueprint
 
 # defines our login page
 
-
 # URL -> GET request, POST -> Submit button
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
@@ -88,6 +87,10 @@ def sign_up():
     # displays the template created from our sign_up.html file
     return render_template("sign_up.html", user=current_user)
 
+
+@auth.route("/startup-page", methods=['GET', 'POST'])
+def test():
+    return render_template("startup_page.html", user=current_user)
 
 
 # NEW AREA FOR THE OTHER ENGINEER PLEASE DO NOT UNCOMMENT #
