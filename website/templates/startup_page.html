@@ -59,21 +59,18 @@
     </style>
 </head>
 
-
-
-
 <body>
     <style>
         h1 {
             text-align: center;
             font-size: 60px;
+            padding-top: 80px;
         }
     </style>
-    <h1>Welcome to iBox!</h1>
 
+    <h1>Welcome to iBox</h1>
 
-
-    <!-- The Modal -->
+    <!-- The Modal for login -->
     <div id="LoginModal" class="modal">
 
         <!-- Modal content -->
@@ -83,25 +80,23 @@
             <form method="POST">
                 <h3 align="center">Login</h3>
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" />
+                    <label for="email-login">Email Address</label>
+                    <input type="email" class="form-control" id="email-login" name="email-login" placeholder="Enter email" />
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password"
+                    <label for="password-login">Password</label>
+                    <input type="password" class="form-control" id="password-login" name="password-login"
                         placeholder="Enter password" />
                 </div>
                 <br />
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" id = "form-submit" name ="form-submit" class="btn btn-primary">Login</button>
             </form>
             </p>
         </div>
 
     </div>
 
-
-
-    <!-- The Modal -->
+    <!-- The Modal for sign up -->
     <div id="SignupModal" class="modal">
 
         <!-- Modal content -->
@@ -135,16 +130,11 @@
                 </div>
                 <br />
                 <!-- creates a clickable button-->
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" id = "form2-submit" name = "form2-submit" class="btn btn-primary">Submit</button>
             </form>
             </p>
         </div>
-
-
-
-
     </div>
-    <!-- Trigger/Open The Modal -->
 
     <head>
         <style>
@@ -154,7 +144,7 @@
                 border: 5px solid #007bff;
                 padding: 150px;
                 border-radius: 25px;
-            
+
 
             }
         </style>
@@ -164,7 +154,7 @@
         <style>
             .block {
                 display: block;
-                width: 100%;
+                width: 50%;
                 border: none;
                 background-color: #007bff;
                 padding: 30px 28px;
@@ -173,23 +163,18 @@
                 cursor: pointer;
                 text-align: center;
                 border-radius: 10px;
-                margin-bottom:25px;
-                margin-top:25px;
+                margin-bottom: 25px;
+                margin-top: 25px;
             }
         </style>
-        <div >
+        <!-- Trigger/Open The Modal -->
+        <div align="center">
             <p> <button align="center" id="LoginBtn" type="submit" class="block">Login</button>
                 <!-- Trigger/Open The Modal -->
                 <button align="center" id="SignupBtn" type="submit" class="block">Sign Up</button>
             </p>
         </div>
-
-
-
     </body>
-
-
-
 
     <script>
         // Get the modal
@@ -202,7 +187,7 @@
 
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
-
+        var span2 = document.getElementsByClassName("close")[1];
         // When the user clicks the button, open the modal 
         btn.onclick = function () {
             modal.style.display = "block";
@@ -214,17 +199,23 @@
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
+
+        }
+        span2.onclick = function () {
+            modal2.style.display = "none";
+
         }
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
-            if (event.target == modal) {
+            if (event.target == modal || event.target == modal2) {
                 modal.style.display = "none";
+                modal2.style.display = "none";
+
             }
         }
     </script>
 
 </body>
-
 </html>
 {% endblock %}
