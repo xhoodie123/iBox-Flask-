@@ -2,57 +2,30 @@ from posixpath import splitext
 from flask import Blueprint, render_template, request, flash, jsonify, g, session, url_for, session
 from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
-from . models import Note, User
+from . models import User
 from . import db, UPLOAD_FOLDER, FILE_EXT
 import json  # for delete note
 # for securing uploaded file/download file
 from werkzeug.utils import secure_filename, send_file
 from flask import Flask, redirect, send_file, abort  # needed for downloads section
 import os
-
-#for chat
+# for chat
 from flask_wtf import Form
 from wtforms.fields import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_socketio import emit, join_room, leave_room
 from . import socketio
-
-
 from flask import session
 from flask_socketio import emit, join_room, leave_room
-
 import datetime
 
 views = Blueprint("views", __name__)
 
+
 @views.route("/", methods=['GET', 'POST'])  # Note post Method is allowed
 @login_required  # cannot get to homepage if not logged in
 def home():
-    if request.method == 'POST':
-        note = request.form.get('note')
-        if len(note) < 1:
-            flash('Note is short', category='error')
-        else:
-            # add note to database and associate with user
-            new_note = Note(data=note, user_id=current_user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            flash('Note added', category='success')
-    # ref current user to check if logged in
     return render_template("home.html", user=current_user)
-
-
-@views.route('/delete-note', methods=['POST'])
-def delete_note():
-    # turn string  into python dictionary object
-    note = json.loads(request.data)
-    noteId = note['noteId']  # access note id
-    note = Note.query.get(noteId)  # find the note
-    if note:  # if note belongs to the user
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
-    return jsonify({})  # return empty response
 
 
 @views.route('/uploadfile', methods=['GET', 'POST'])
@@ -81,7 +54,9 @@ def upload_file():
 
     return render_template('upload_file.html', user=current_user)
 
-@views.route('/uploads/<filename>', methods=['GET']) # had to be changed to allow button function
+
+# had to be changed to allow button function
+@views.route('/uploads/<filename>', methods=['GET'])
 def manage_file(filename):
     return render_template('manage_file.html', user=current_user, value=filename)
 
@@ -94,6 +69,7 @@ def return_files(filename):
         return render_template('home.html', user=current_user)
     return send_file(file_path, as_attachment=True, attachment_filename='')
 
+
 @views.route('/delete-files/<filename>')
 def delete_files(filename):
     if filename == '<filename>':
@@ -103,6 +79,7 @@ def delete_files(filename):
     print('delete successful')
     flash('File deleted', category='success')
     return render_template('uploads.html', user=current_user)
+
 
 @views.route('/', defaults={'req_path': ''})
 @views.route('/<path:req_path>')
@@ -118,21 +95,25 @@ def list_file(req_path):
     uploads = os.listdir(abs_path)
     return render_template('uploads.html', uploads=uploads, user=current_user)
 
+
 @views.route('/chat', methods=['GET', 'POST'])
 def chat():
-    if(request.method=='POST'):
+    if(request.method == 'POST'):
         if not current_user.is_authenticated:
-            flash ('please login !', 'danger')
+            flash('please login !', 'danger')
             return redirect(url_for('auth.login'))
     return render_template("chat.html", user=current_user)
+
 
 @views.route('/group_manager', methods=['GET'])
 def group_manager():
     return render_template('group_manager.html', user=current_user)
 
+
 @views.route('/create_group', methods=['GET'])
 def create_group():
     return render_template('create_group.html', user=current_user)
+
 
 @views.route('/join_group', methods=['GET'])
 def join_group():

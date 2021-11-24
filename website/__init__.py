@@ -3,24 +3,20 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager, login_manager
 import os
-
-
 from flask_socketio import SocketIO
 import socketio
 from werkzeug.routing import BaseConverter
 
 db = SQLAlchemy()  # define a new database
 DB_NAME = "database.db"  # give it a name, store this database in the website folder
-
-_basedir_ = os.path.abspath(os.path.dirname(__file__))
-
 UPLOAD_FOLDER = 'website/uploads/'  # needed for downloads section
 FILE_EXT = ['.mp3', '.ogg', '.wav', '.zip', '.7z', '.jpeg', '.jpg', '.png',
-                                       '.gif', '.ppt', '.py', '.cpp', '.mp4', '.mpeg', '.mpg', '.avi', '.docx', '.doc', '.pdf', '.rtf', '.txt']
+            '.gif', '.ppt', '.py', '.cpp', '.mp4', '.mpeg', '.mpg', '.avi', '.docx', '.doc', '.pdf', '.rtf', '.txt', '.odt']
 
 if not os.path.exists(UPLOAD_FOLDER):  # create upload folder
     os.mkdir(UPLOAD_FOLDER)
-  
+
+
 def create_application():
     application = Flask(__name__)  # initiallizes flask
     # encrypts or secures cookies and session data realted to th site
@@ -30,19 +26,20 @@ def create_application():
     # take database and tell it that its going to be used in this app
     db.init_app(application)
     socketio = SocketIO(application)
-    
+
     application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    application.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 32 #32MB max file size
+    application.config['MAX_CONTENT_LENGTH'] = 1024 * \
+        1024 * 32  # 32MB max file size
     application.config['UPLOAD_EXTENSIONS'] = FILE_EXT
 
     # telling app where the routes are
     from .views import views
     from .auth import auth
-    
+
     application.register_blueprint(views, url_prefix='/')
     application.register_blueprint(auth, url_prefix='/')
 
-    from .models import User # defines our classes
+    from .models import User  # defines our classes
 
     create_database(application)
 
@@ -58,6 +55,7 @@ def create_application():
         return User.query.get(int(id))
 
     return application
+
 
 def create_database(application):
     if not path.exists('website/' + DB_NAME):

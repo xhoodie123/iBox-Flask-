@@ -8,5 +8,3 @@ application = create_application()
 if __name__ == "__main__": 	# runs flask app, only if we run this file it will run the server
     application.debug = True
     application.run()
-
-# test

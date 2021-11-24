@@ -1,36 +1,25 @@
 {% extends "base.html" %} {% block title %}Chat{% endblock %}
 
 {% block content %}
+
 <body>
-
-
-
-
-
 	<h1> Group Chat</h1>
 	<h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
 	<div class="message_holder"> </div>
 	<br><br>
-	<div id = "display-message-section"></div>
-	
+	<div id="display-message-section"></div>
+
 	<div id="input-area" class="input-group mb-3">
-		<input type="text" id="message" class ="form-control" size="80" placeholder="Enter your message here">
-		<div class = "input-group-append">
-			<button type="button" id ="send_message" class = "btn btn-primary" > Send </button>
-	</div>
-	
-	<span id = "get-email">{{email}}</span>
-	
-	<a href="/home" onclick="leave_room();">Leave this room</a>
+		<input type="text" id="message" class="form-control" size="80" placeholder="Enter your message here">
+		<div class="input-group-append">
+			<button type="button" id="send_message" class="btn btn-primary"> Send </button>
+		</div>
 
-	<script src="{{ url_for('static', filename='index.js') }}"></script>
+		<span id="get-email">{{email}}</span>
 
+		<a href="/home" onclick="leave_room();">Leave this room</a>
 
-	
-
+		<script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 
 {% endblock %}
-
-
-
