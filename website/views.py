@@ -1,8 +1,8 @@
 from posixpath import splitext
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, g, session, url_for, session
 from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
-from . models import Note, User, Group
+from . models import Note, User
 from . import db, UPLOAD_FOLDER, FILE_EXT
 import json  # for delete note
 # for securing uploaded file/download file
@@ -10,8 +10,20 @@ from werkzeug.utils import secure_filename, send_file
 from flask import Flask, redirect, send_file, abort  # needed for downloads section
 import os
 
-views = Blueprint("views", __name__)
+#for chat
+from flask_wtf import Form
+from wtforms.fields import StringField, SubmitField
+from wtforms.validators import DataRequired
+from flask_socketio import emit, join_room, leave_room
+from . import socketio
 
+
+from flask import session
+from flask_socketio import emit, join_room, leave_room
+
+import datetime
+
+views = Blueprint("views", __name__)
 
 @views.route("/", methods=['GET', 'POST'])  # Note post Method is allowed
 @login_required  # cannot get to homepage if not logged in
@@ -105,6 +117,14 @@ def list_file(req_path):
         return manage_file(req_path)
     uploads = os.listdir(abs_path)
     return render_template('uploads.html', uploads=uploads, user=current_user)
+
+@views.route('/chat', methods=['GET', 'POST'])
+def chat():
+    if(request.method=='POST'):
+        if not current_user.is_authenticated:
+            flash ('please login !', 'danger')
+            return redirect(url_for('auth.login'))
+    return render_template("chat.html", user=current_user)
 
 @views.route('/group_manager', methods=['GET'])
 def group_manager():

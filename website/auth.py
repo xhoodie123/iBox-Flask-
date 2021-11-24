@@ -3,8 +3,6 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from sqlalchemy.sql.functions import current_user, user
 from .models import User
 
-#from .models import User, UserRoles, Role
-
 # encrypts password, no inverse function
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import UPLOAD_FOLDER, db
@@ -80,46 +78,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
-
-# NEW AREA FOR THE OTHER ENGINEER PLEASE DO NOT UNCOMMENT #
-
-#initializes db
-
-#def init_db():
-#	db.drop_all()
-#	db.create_all()
-#	create_users()
-	
-#creates users
-#def create_users():
-#	db.create_all()
-	
-	#adding roles
-	
-#	admin_role = find_or_create_role('admin', u'Admin')
-	
-	#add users
-#	user = find_or_create_user(u'Admin', u'Example', u'admin@example.com', 'Password1', admin_role)
-#	user = find_or_create_user(u'Member', u'Example', u'member@example.com', 'Password1')
-#	db.session.commit() 
-	
-
-
-#creates or detemines roles
-#def find_or_create_role(name, label):
-#	role = Role.query.filter(Role.name==name).first()
-#	if not role:
-#		role = Role(name=name, label = label)
-#		db.session.add(role)
-#	return role
-
-#creates or determines users	
-#def find_or_create_user(first_name, last_name, email, password, role = None):
-
-#	user = User.query.filter(User.email == email).first()
-#	if not user:
-#		user = User( email=email, first_name = first_name, last_name = last_name, passowrd = current_app.user_manager.password_manager.hash_password(password), active = True, email_confirmed_at = datetime.datetime.utcnow())
-#	if role:
-#		user.roles.append(role)
-#	db.session.add(user)
-#	return user	
