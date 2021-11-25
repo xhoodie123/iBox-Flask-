@@ -1,4 +1,16 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
 {% block content %}
-<h1 align="center">Group Chat</h1>
+
+<h1 align="center">Enter Group Name</h1>
+
+<body class="text-center" align="center">
+  <form method="POST" align="center">
+    {{ form.hidden_tag() }}
+    {{ form.username.label }}: <br> {{ form.username() }} {% for error in form.username.errors %}{{ error }}{% endfor
+    %}<br>
+    {{ form.room.label }}: <br> {{ form.room() }} {% for error in form.room.errors %}{{ error }}{% endfor %}<br>
+
+    <br><button class='btn btn-primary' onClick='{{form.submit()}}'>Enter Room</button></a>
+  </form>
+</body>
 {% endblock %}

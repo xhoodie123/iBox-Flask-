@@ -7,6 +7,7 @@ from flask_socketio import SocketIO
 import socketio
 from werkzeug.routing import BaseConverter
 
+socketio = SocketIO()
 db = SQLAlchemy()  # define a new database
 DB_NAME = "database.db"  # give it a name, store this database in the website folder
 UPLOAD_FOLDER = 'website/uploads/'  # needed for downloads section
@@ -25,7 +26,7 @@ def create_application():
     application.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     # take database and tell it that its going to be used in this app
     db.init_app(application)
-    socketio = SocketIO(application)
+    socketio.init_app(application)
 
     application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     application.config['MAX_CONTENT_LENGTH'] = 1024 * \

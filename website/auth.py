@@ -14,7 +14,7 @@ auth = Blueprint("auth", __name__)  # defines blueprint
 # URL -> GET request, POST -> Submit button
 
 
-@auth.route("/startup-page", methods=['GET', 'POST'])
+@auth.route("/", methods=['GET', 'POST'])
 def login():
     if "form-submit" in request.form:
         if request.method == 'POST':
