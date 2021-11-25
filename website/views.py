@@ -1,10 +1,10 @@
-from posixpath import splitext
 from flask import Blueprint, render_template, request, flash, jsonify, g, session, url_for, session
 from flask.helpers import flash, send_from_directory
 from flask_login import login_required, current_user
+from flask_login.utils import login_url
+from werkzeug.exceptions import RequestEntityTooLarge
 from . models import User, LoginForm
 from . import db, UPLOAD_FOLDER, FILE_EXT
-import json  # for delete note
 # for securing uploaded file/download file
 from werkzeug.utils import secure_filename, send_file
 from flask import Flask, redirect, send_file, abort  # needed for downloads section
@@ -51,8 +51,8 @@ def left(message):
          ' has left the room.'}, room=room)
 
 
-@login_required
 @views.route('/home', methods=['GET', 'POST'])
+@login_required
 def home():
     form = LoginForm()
     if form.validate_on_submit():
@@ -65,8 +65,8 @@ def home():
     return render_template('home.html', form=form, user=current_user)
 
 
-@login_required
 @views.route('/chat')
+@login_required
 def chat():
     username = session.get('username', '')
     room = session.get('room', '')
@@ -75,8 +75,8 @@ def chat():
     return render_template('chat.html', username=username, room=room, user=current_user)
 
 
-@login_required
 @views.route('/uploadfile', methods=['GET', 'POST'])
+@login_required
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -105,11 +105,13 @@ def upload_file():
 
 # had to be changed to allow button function
 @views.route('/uploads/<filename>', methods=['GET'])
+@login_required
 def manage_file(filename):
     return render_template('manage_file.html', user=current_user, value=filename)
 
 
 @views.route('/return-files/<filename>')
+@login_required
 def return_files(filename):
     file_path = 'uploads/' + filename
     if filename == '<filename>':
@@ -119,6 +121,7 @@ def return_files(filename):
 
 
 @views.route('/delete-files/<filename>')
+@login_required
 def delete_files(filename):
     if filename == '<filename>':
         flash('File not found!', category='error')
@@ -131,6 +134,7 @@ def delete_files(filename):
 
 @views.route('/', defaults={'req_path': ''})
 @views.route('/<path:req_path>')
+@login_required
 def list_file(req_path):
     # joining the base and requested path
     abs_path = os.path.join('website/', req_path)
@@ -143,17 +147,19 @@ def list_file(req_path):
     uploads = os.listdir(abs_path)
     return render_template('uploads.html', uploads=uploads, user=current_user)
 
-
 @views.route('/group_manager', methods=['GET'])
+@login_required
 def group_manager():
     return render_template('group_manager.html', user=current_user)
 
 
 @views.route('/create_group', methods=['GET'])
+@login_required
 def create_group():
     return render_template('create_group.html', user=current_user)
 
 
 @views.route('/join_group', methods=['GET'])
+@login_required
 def join_group():
     return render_template('join_group.html', user=current_user)

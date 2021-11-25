@@ -1,11 +1,11 @@
 from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
-from os import path
 from flask_login import LoginManager, login_manager
-import os
 from flask_socketio import SocketIO
 import socketio
 from werkzeug.routing import BaseConverter
+import os
+from os import path
 
 socketio = SocketIO()
 db = SQLAlchemy()  # define a new database
