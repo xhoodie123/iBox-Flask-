@@ -25,7 +25,7 @@
             $('#text').keypress(function (e) {
                 var code = e.keyCode || e.which;
                 if (code == 13) {
-                    message = $('#text').val();
+                    text = $('#text').val();
                     $('#text').val('');
                     socket.emit('text', { msg: text });
                 }
