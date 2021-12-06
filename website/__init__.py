@@ -12,7 +12,8 @@ db = SQLAlchemy()  # define a new database
 DB_NAME = "database.db"  # give it a name, store this database in the website folder
 UPLOAD_FOLDER = 'website/uploads/'  # needed for downloads section
 FILE_EXT = ['.mp3', '.ogg', '.wav', '.zip', '.7z', '.jpeg', '.jpg', '.png',
-            '.gif', '.ppt', '.py', '.cpp', '.mp4', '.mpeg', '.mpg', '.avi', '.docx', '.doc', '.pdf', '.rtf', '.txt', '.odt']
+            '.gif', '.ppt', '.py', '.cpp', '.mp4', '.mpeg', '.mpg', '.avi',
+            '.docx', '.doc', '.pdf', '.rtf', '.txt', '.odt', '.text']
 
 if not os.path.exists(UPLOAD_FOLDER):  # create upload folder
     os.mkdir(UPLOAD_FOLDER)
